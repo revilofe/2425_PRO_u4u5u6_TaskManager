@@ -1,6 +1,6 @@
 # Actividad: Desarrollo de Proyecto Software en Kotlin
 
-**ID actividad:** 2425_PRO_u4u5u6_libre
+**ID actividad:** 2425_PRO_u4u5u6_taskManager
 
 **Agrupamiento de la actividad**: Individual 
 
@@ -8,7 +8,61 @@
 
 ### Descripción:
 
-La actividad consiste en el desarrollo de un proyecto software en Kotlin, permitiendo al estudiante elegir la temática. Este proyecto debe demostrar la comprensión y aplicación de los conceptos de programación orientada a objetos (POO), incluyendo el uso y manejo de estructuras de datos complejas, la definición y uso de clases, herencia, interfaces, genericos, expresiones regulares, principios SOLID y el uso de librerías externas.
+A continuación, te presento el **ejercicio** detallado que integra los fundamentos de la programación orientada a objetos, principios SOLID (en particular, el principio de inversión de dependencias) y la separación en capas (presentación y lógica de aplicación) en una aplicación de consola para la gestión de tareas y eventos en proyectos colaborativos.
+
+---
+
+### **Ejercicio: Gestor de Tareas y Eventos para Proyectos Colaborativos**
+
+#### **Contexto y Objetivo**
+
+Desarrolla una aplicación de consola en Kotlin que permita gestionar **actividades** en un proyecto colaborativo. Estas actividades se dividen en dos tipos: **Tareas** y **Eventos**. Ambas derivan de una superclase o interfaz denominada **Actividad**.
+
+La aplicación debe seguir una **arquitectura en capas**, separando claramente:
+- **La capa de presentación (UI):** se encarga de la interacción con el usuario a través de la consola.
+- **La capa de lógica de aplicación:** gestiona la lógica de negocio (creación, almacenamiento y manejo de actividades).
+- **La capa de datos (si se implementa):** aunque en este ejercicio se puede utilizar un repositorio en memoria, se debe abstraer su acceso mediante interfaces, aplicando el principio de inversión de dependencias.
+
+#### **Requerimientos Funcionales y No Funcionales**
+
+1. **Arquitectura en Capas y Principio de Inversión de Dependencias**
+   - La lógica de negocio debe depender de abstracciones (por ejemplo, interfaces de repositorios) y no de implementaciones concretas.
+   - La comunicación entre la interfaz de usuario y la lógica de negocio debe estar claramente separada.
+
+2. **Modelo de Dominio: Actividad, Tarea y Evento**
+   - **Actividad (Superclase o Interfaz):**
+     - Contendrá la lógica común a todas las actividades.
+     - Posee un **id**. No se puede modificar. No puede ser nula.
+     - Posee un **descripción**. No puede ser nula.
+     - Debe incluir una propiedad, `detalle`, cuyo `get` utilice la lógica común para concatenar el *id* y la descripción.
+   - **Tarea:**
+     - Tiene un campo **id** que se genera automáticamente y que no se puede modificar.
+     - Posee una **descripción**. 
+     - Posee un **estado**, por defecto abierta. Que toma valores de la enum class Statu = {ABIERTA, CERRADA} 
+     - Tiene una propiedad **detalle** que se genera dinámicamente (por ejemplo, `id + " - " + descripción`).
+     - Su constructor es **privado**. Se debe disponer de un método de clase (companion object) llamado `creaInstancia` para generar una nueva instancia.
+     - Sobre escribe toString. Muestra sus detalles.
+   - **Evento:**
+     - Similar a **Tarea** en cuanto a tener un constructor privado y el método `creaInstancia`.
+     - Tiene atributos propios una `fecha` Y `ubicación` y heredar la lógica común definida en **Actividad**.
+     - Sobre escribe toString. Muestra sus detalles.
+
+3. **Buenas Prácticas y Principios SOLID**
+   - Utiliza el principio de **inversión de dependencias**: la lógica de negocio no debe depender de clases concretas para el almacenamiento de las actividades.
+   - Documenta y comenta el código de forma clara y didáctica.
+   - Separa los métodos estáticos (en Kotlin se implementan mediante *companion objects*) y asegúrate de que la creación de instancias se haga mediante el método `creaInstancia`.
+
+4. **Interfaz de Usuario (Consola)**
+   - La aplicación debe interactuar con el usuario a través de la consola, mostrando un menú que permita:
+     - Crear una nueva actividad (seleccionando entre Tarea o Evento).
+     - Listar todas las actividades registradas.
+   - La capa de presentación debe comunicarse con la lógica de negocio a través de interfaces o abstracciones.
+
+5. **Lógica de Aplicación**
+   - Implementa un servicio (por ejemplo, `ActividadService`) que gestione la creación, almacenamiento (en memoria) y consulta de actividades.
+   - Este servicio debe depender de una interfaz de repositorio (por ejemplo, `IActividadRepository`), permitiendo cambiar la implementación del almacenamiento sin afectar la lógica de negocio.
+
+
 
 **Objetivo:**
 
@@ -22,22 +76,41 @@ La actividad consiste en el desarrollo de un proyecto software en Kotlin, permit
 
 **Trabajo a realizar:**
 
-1. **Selección de la Temática:** Elige un tema de tu interés que pueda ser abordado mediante una aplicación software. Esto podría ser desde una aplicación de gestión para una pequeña empresa, una herramienta para ayudar en la educación, hasta un juego simple. Define claramente el problema que tu aplicación pretende resolver.
+El que se deriva de la descripción. No obsgtante te listo algunas cosas, auqnue no tienen porque estar todas:
 
-2. **Planificación:** Documenta brevemente cómo tu aplicación solucionará el problema seleccionado, incluyendo las funcionalidades principales que desarrollarás.
+1. **Definición de Clases y Estructura del Proyecto**
+   - Crea un paquete (o módulo) para cada capa: 
+     - `presentacion` para la interfaz de usuario.
+     - `aplicacion` o `servicios` para la lógica de negocio.
+     - `datos` para la implementación del repositorio (en memoria).
+     - `dominio` para definir las clases **Actividad**, **Tarea** y **Evento**.
 
-3. **Desarrollo:**
-   - **Instancia de Objetos:** Tu aplicación debe crear y utilizar objetos, demostrando tu comprensión de la instanciación y el uso de constructores, métodos, y propiedades.
-   - **Métodos Estáticos:** Define y utiliza al menos un método estático, explicando por qué es necesario en tu aplicación.
-   - **Uso de IDE:** Desarrolla tu proyecto utilizando un IDE, aprovechando sus herramientas para escribir, compilar, y probar tu código.
-   - **Definición de Clases:** Crea clases personalizadas con sus respectivas propiedades, métodos, y constructores.
-   - **Clases con genéricos:** Define y utiliza al menos una clase que haga uso de genéricos en tu aplicación.
-   - **Herencia y Polimorfismo:** Implementa herencia y/o interfaces en tu proyecto para demostrar la reutilización de código y la flexibilidad de tu diseño.  **Usa los principios SOLID:** Ten presente durante el desarrollo los principios SOLID y úsalos durante el diseño para mejorar tu aplicación.
-   - **Librerías de Clases:** Integra y utiliza una o más librerías externas que enriquezcan la funcionalidad de tu aplicación.
-   - **Documentación:** Comenta tu código de manera efectiva, facilitando su comprensión y mantenimiento.
+2. **Implementación del Modelo de Dominio**
+   - Define la superclase o interfaz **Actividad** que incluya:
+     - Una propiedad común `detalle` .
+     - Cualquier lógica que consideres común a Tareas y Eventos.
+   - Implementa **Tarea** y **Evento**:
+     - **Campos inmutables:** El campo **id** debe generarse automáticamente (puedes utilizar una variable estática en la clase).
+     - **Constructores privados:** Asegúrate de que los constructores sean privados y se acceda a ellos únicamente mediante el método `creaInstancia` en el *companion object*.
+     - **Propiedad `detalle`:** Implementa el getter para que retorne la concatenación del **id** y la **descripción**.
 
-4. **Prueba y Depuración:** Realiza pruebas para asegurarte de que tu aplicación funciona como se espera y depura cualquier error encontrado.
-5. **Contesta a las preguntas** Ver el punto **Preguntas para la Evaluación**
+3. **Desarrollo de la Lógica de Aplicación**
+   - Implementa un servicio (`ActividadService`) que:
+     - Utilice una interfaz de repositorio (`IActividadRepository`) para almacenar y recuperar actividades.
+     - Permita la creación de nuevas actividades mediante métodos que invoquen `creaInstancia` de cada clase.
+   - Recuerda aplicar el **principio de inversión de dependencias**: el servicio debe depender de la abstracción, no de una implementación concreta.
+
+4. **Interfaz de Usuario (Consola)**
+   - Crea una interfaz de usuario sencilla que muestre un menú:
+     - **Opción 1:** Crear nueva actividad (se debe preguntar al usuario si desea crear una Tarea o un Evento, luego solicitar los datos requeridos).
+     - **Opción 2:** Listar todas las actividades, mostrando el detalle (id y descripción) de cada una.
+   - La capa de presentación debe invocar los métodos del servicio para realizar las operaciones solicitadas.
+
+5. **Documentación y Comentarios**
+   - Asegúrate de comentar el código, explicando las decisiones de diseño, la aplicación de los principios SOLID (especialmente la inversión de dependencias) y el funcionamiento general del sistema.
+
+6. **Prueba y Depuración:** Realiza pruebas para asegurarte de que tu aplicación funciona como se espera y depura cualquier error encontrado.
+7. **Contesta a las preguntas** Ver el punto **Preguntas para la Evaluación**
 
 ### Recursos
 
