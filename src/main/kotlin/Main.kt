@@ -139,7 +139,7 @@ class ActividadRepository : IActividadRepository {
         actividades.add(actividad)
     }
 
-    override fun obtenerTodas(): List<Actividad> = actividades
+    override fun obtenerTodas(): List<Actividad> = actividades.toList()
 }
 
 // ====================
