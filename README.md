@@ -31,15 +31,15 @@ La aplicación debe seguir una **arquitectura en capas**, separando claramente:
 
 2. **Modelo de Dominio: Actividad, Tarea y Evento**
    - **Actividad (Superclase o Interfaz):**
-     - Contendrá la lógica común a todas las actividades.
+     - Contendrá la lógica común a todas las actividades, aunque no se permitirá la creación de una instancia de la misma.
      - Posee un **id**. Se asigna automáticamente al crear la instancia. No puede ser nula. No se puede modificar.
      - Posee una **fechaCreación**. Se asigna automáticamente al crear la instancia. No puede ser nula. No se puede modificar.
      - Posee un **descripción**. No puede ser nula.
-     - Debe incluir una propiedad, `detalle`, cuyo `get` utilice la lógica común para concatenar el *id* y la descripción.
+     - Debe incluir una propiedad, `detalle`, cuyo `get` utilice la lógica común para concatenar el *id* y la descripción (`<id> + " - " + <descripcion>`).
    - **Tarea:**
      - Hereda las propiedades de Actividad.
      - Posee una propiedad **estado**, por defecto abierta. Que toma valores de la enum class Statu = {ABIERTA, CERRADA} 
-     - Tiene una propiedad **detalle** que se genera dinámicamente: `id + " - " + descripción`.
+     - Tiene una propiedad **detalle** que se genera dinámicamente: `<id> + " - " + <descripcion> + "[Estado: <estado>]"`.
      - Su constructor es **privado**. Se debe disponer de un método de clase (companion object) llamado `creaInstancia` para generar una nueva instancia.
      - Sobreescribe `toString`. Muestra formateada toda la información de la tarea.
      - Cualquier otra propiedad o método que consideres necesario. No olvides comentarlo
@@ -47,7 +47,7 @@ La aplicación debe seguir una **arquitectura en capas**, separando claramente:
      - Hereda las propiedades de Actividad.
      - Tiene la propiedad **fecha**.
      - Tiene la propiedad **ubicación**.
-     - Tiene una propiedad **detalle** que se genera dinámicamente: `id+ " - " + ubicacion + " - " + descripción`).
+     - Tiene una propiedad **detalle** que se genera dinámicamente: `<id> + " - " + <descripcion> + "[Fecha: <fecha>, Ubicación: <ubicacion>]"`.
      - Similar a **Tarea** en cuanto a tener un constructor privado y el método `creaInstancia`.
      - Sobre escribe `toString`. Muestra formateada toda la información del evento.
      - Cualquier otra propiedad o método que consideres necesario. No olvides comentarlo
