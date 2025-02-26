@@ -21,7 +21,7 @@ Desarrolla una aplicación de consola en Kotlin que permita gestionar **activida
 La aplicación debe seguir una **arquitectura en capas**, separando claramente:
 - **La capa de presentación (UI):** se encarga de la interacción con el usuario a través de la consola.
 - **La capa de lógica de aplicación:** gestiona la lógica de negocio (creación, almacenamiento y manejo de actividades).
-- **La capa de datos (si se implementa):** aunque en este ejercicio se puede utilizar un repositorio en memoria, se debe abstraer su acceso mediante interfaces, aplicando el principio de inversión de dependencias.
+- **La capa de acceso a datos:** aunque en este ejercicio se puede utilizar un repositorio en memoria, se debe abstraer su acceso mediante interfaces, aplicando el principio de inversión de dependencias.
 
 #### **Requerimientos Funcionales y No Funcionales**
 
@@ -32,36 +32,41 @@ La aplicación debe seguir una **arquitectura en capas**, separando claramente:
 2. **Modelo de Dominio: Actividad, Tarea y Evento**
    - **Actividad (Superclase o Interfaz):**
      - Contendrá la lógica común a todas las actividades.
-     - Posee un **id**. No se puede modificar. No puede ser nula.
+     - Posee un **id**. Se asigna automáticamente al crear la instancia. No puede ser nula. No se puede modificar.
+     - Posee una **fechaCreación**. Se asigna automáticamente al crear la instancia. No puede ser nula. No se puede modificar.
      - Posee un **descripción**. No puede ser nula.
      - Debe incluir una propiedad, `detalle`, cuyo `get` utilice la lógica común para concatenar el *id* y la descripción.
    - **Tarea:**
-     - Tiene un campo **id** que se genera automáticamente y que no se puede modificar.
-     - Posee una **descripción**. 
-     - Posee un **estado**, por defecto abierta. Que toma valores de la enum class Statu = {ABIERTA, CERRADA} 
-     - Tiene una propiedad **detalle** que se genera dinámicamente (por ejemplo, `id + " - " + descripción`).
+     - Hereda las propiedades de Actividad.
+     - Posee una propiedad **estado**, por defecto abierta. Que toma valores de la enum class Statu = {ABIERTA, CERRADA} 
+     - Tiene una propiedad **detalle** que se genera dinámicamente: `id + " - " + descripción`.
      - Su constructor es **privado**. Se debe disponer de un método de clase (companion object) llamado `creaInstancia` para generar una nueva instancia.
-     - Sobre escribe toString. Muestra sus detalles.
+     - Sobreescribe `toString`. Muestra formateada toda la información de la tarea.
+     - Cualquier otra propiedad o método que consideres necesario. No olvides comentarlo
    - **Evento:**
+     - Hereda las propiedades de Actividad.
+     - Tiene la propiedad **fecha**.
+     - Tiene la propiedad **ubicación**.
+     - Tiene una propiedad **detalle** que se genera dinámicamente: `id+ " - " + ubicacion + " - " + descripción`).
      - Similar a **Tarea** en cuanto a tener un constructor privado y el método `creaInstancia`.
-     - Tiene atributos propios una `fecha` Y `ubicación` y heredar la lógica común definida en **Actividad**.
-     - Sobre escribe toString. Muestra sus detalles.
+     - Sobre escribe `toString`. Muestra formateada toda la información del evento.
+     - Cualquier otra propiedad o método que consideres necesario. No olvides comentarlo
+
 
 3. **Buenas Prácticas y Principios SOLID**
    - Utiliza el principio de **inversión de dependencias**: la lógica de negocio no debe depender de clases concretas para el almacenamiento de las actividades.
-   - Documenta y comenta el código de forma clara y didáctica.
+   - Documenta y comenta el código de forma clara, y sobre todo aquellas aportaciones que no están indicadas en la descripción de la actividad.
    - Separa los métodos estáticos (en Kotlin se implementan mediante *companion objects*) y asegúrate de que la creación de instancias se haga mediante el método `creaInstancia`.
 
 4. **Interfaz de Usuario (Consola)**
    - La aplicación debe interactuar con el usuario a través de la consola, mostrando un menú que permita:
      - Crear una nueva actividad (seleccionando entre Tarea o Evento).
-     - Listar todas las actividades registradas.
+     - Listar todas las actividades registradas. Aplicando polimorfismo, se debe mostrar el detalle de cada actividad (id y descripción).
    - La capa de presentación debe comunicarse con la lógica de negocio a través de interfaces o abstracciones.
 
 5. **Lógica de Aplicación**
    - Implementa un servicio (por ejemplo, `ActividadService`) que gestione la creación, almacenamiento (en memoria) y consulta de actividades.
    - Este servicio debe depender de una interfaz de repositorio (por ejemplo, `IActividadRepository`), permitiendo cambiar la implementación del almacenamiento sin afectar la lógica de negocio.
-
 
 
 **Objetivo:**
