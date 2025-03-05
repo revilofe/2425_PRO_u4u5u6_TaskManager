@@ -8,7 +8,7 @@
 
 ### Descripción:
 
-A continuación, te presento el **ejercicio** detallado que integra los fundamentos de la programación orientada a objetos, principios SOLID (en particular, el principio de inversión de dependencias) y la separación en capas (presentación y lógica de aplicación) en una aplicación de consola para la gestión de tareas y eventos en proyectos colaborativos.
+Ejercicio simple de programación orientada a objetos en Kotlin, aplicando los principios SOLID y la separación en capas en una aplicación de consola para la gestión de tareas y eventos en proyectos colaborativos.
 
 ---
 
@@ -16,58 +16,63 @@ A continuación, te presento el **ejercicio** detallado que integra los fundamen
 
 #### **Contexto y Objetivo**
 
-Desarrolla una aplicación de consola en Kotlin que permita gestionar **actividades** en un proyecto colaborativo. Estas actividades se dividen en dos tipos: **Tareas** y **Eventos**. Ambas derivan de una superclase o interfaz denominada **Actividad**.
+Desarrolla una aplicación de consola en Kotlin que permita gestionar **actividades** en un proyecto colaborativo. Estas actividades se dividen en dos tipos: **Tareas** y **Eventos**, por tanto ambas derivan de una superclase o interfaz denominada **Actividad**.
 
 La aplicación debe seguir una **arquitectura en capas**, separando claramente:
 - **La capa de presentación (UI):** se encarga de la interacción con el usuario a través de la consola.
-- **La capa de lógica de aplicación:** gestiona la lógica de negocio (creación, almacenamiento y manejo de actividades).
-- **La capa de acceso a datos:** aunque en este ejercicio se puede utilizar un repositorio en memoria, se debe abstraer su acceso mediante interfaces, aplicando el principio de inversión de dependencias.
+- **La capa de lógica de aplicación:** gestiona la lógica de negocio (creación, almacenamiento y manejo de actividades). Esta capa conoce como realizar las operaciones relacionadas con la creación y consulta de actividades. Además conoce las entidades de dominio y se comunica con la capa de acceso a datos y debe depender de abstracciones, no de implementaciones concretas.
+- **La capa de acceso a datos:** se encarga de almacenar y recuperar las actividades en memoria. En este caso, no se requiere persistencia en una base de datos, sino que se almacenarán en memoria. Por tanto esta capa conoce como almacenar y recuperar las actividades. Aunque en este ejercicio se puede utilizar un repositorio en memoria, se debe abstraer su acceso mediante interfaces, aplicando el principio de inversión de dependencias.
 
 #### **Requerimientos Funcionales y No Funcionales**
 
 1. **Arquitectura en Capas y Principio de Inversión de Dependencias**
    - La lógica de negocio debe depender de abstracciones (por ejemplo, interfaces de repositorios) y no de implementaciones concretas.
-   - La comunicación entre la interfaz de usuario y la lógica de negocio debe estar claramente separada.
+   - De igual forma, la comunicación entre la interfaz de usuario y la lógica de negocio debe estar claramente separada, por lo que se debe utilizar interfaces o abstracciones para comunicarse entre capas.
 
 2. **Modelo de Dominio: Actividad, Tarea y Evento**
-   - **Actividad (Superclase o Interfaz):**
+   - **`Actividad` (Superclase o Interfaz):**
+     - Esta clase no se podrá instanciar, sino que será la superclase de `Tarea` y `Evento`.
      - Contendrá la lógica común a todas las actividades.
-     - Posee un **id**. Se asigna automáticamente al crear la instancia. No puede ser nula. No se puede modificar.
-     - Posee una **fechaCreación**. Se asigna automáticamente al crear la instancia. No puede ser nula. No se puede modificar.
-     - Posee un **descripción**. No puede ser nula.
-     - Debe incluir una propiedad, `detalle`, cuyo `get` utilice la lógica común para concatenar el *id* y la descripción.
-   - **Tarea:**
-     - Hereda las propiedades de Actividad.
-     - Posee una propiedad **estado**, por defecto abierta. Que toma valores de la enum class Statu = {ABIERTA, CERRADA} 
-     - Tiene una propiedad **detalle** que se genera dinámicamente: `id + " - " + descripción`.
-     - Su constructor es **privado**. Se debe disponer de un método de clase (companion object) llamado `creaInstancia` para generar una nueva instancia.
-     - Sobreescribe `toString`. Muestra formateada toda la información de la tarea.
+     - Posee un `id`. Se asigna valor automáticamente al crear la instancia. No puede ser nula. No se puede modificar.
+     - Posee una `fechaCreacion`. Se asigna valor automáticamente al crear la instancia. No puede ser nula. No se puede modificar.
+     - Posee una `descripcion`. No puede ser nula.
+     - Debe incluir una propiedad, `detalle`, cuyo `get` retorne la concatenación del `id` y la `descripción`: `id + " - " + descripción`
+   - **`Tarea`:**
+     - Hereda las propiedades de `Actividad`.
+     - Posee una propiedad `estado`, por defecto abierta. Toma valores de la enum class `Status` = {`ABIERTA`, `CERRADA`}
+     - Su único constructor es `privado`. Se debe disponer de un método de clase (companion object) llamado `creaInstancia` para generar una nueva instancia.
+     - Sobreescribe `toString`. Muestra formateada toda la información de la tarea, en modo `Tarea=[nombreAtributo: valorAtributo, ...]`.
      - Cualquier otra propiedad o método que consideres necesario. No olvides comentarlo
-   - **Evento:**
+   - **`Evento`:**
      - Hereda las propiedades de Actividad.
-     - Tiene la propiedad **fecha**.
-     - Tiene la propiedad **ubicación**.
-     - Tiene una propiedad **detalle** que se genera dinámicamente: `id+ " - " + ubicacion + " - " + descripción`).
-     - Similar a **Tarea** en cuanto a tener un constructor privado y el método `creaInstancia`.
+     - Posee una `fecha` de realización. No puede ser nula.
+     - Posee una `ubicación`, representada mediante una cadena.
+     - Posee un `detalle` que se genera dinámicamente: `id+ " - " + ubicacion + " - " + descripción`.
+     - Similar a `Tarea` en cuanto a que su único constructor es privado y dispone del método de clase `creaInstancia` para crear las instancias.
      - Sobre escribe `toString`. Muestra formateada toda la información del evento.
      - Cualquier otra propiedad o método que consideres necesario. No olvides comentarlo
 
 
 3. **Buenas Prácticas y Principios SOLID**
-   - Utiliza el principio de **inversión de dependencias**: la lógica de negocio no debe depender de clases concretas para el almacenamiento de las actividades.
+   - Haz uso del principio de **inversión de dependencias**: la lógica de negocio no debe depender de clases concretas para el almacenamiento de las actividades, sino de abstracciones. De igual forma la capa de presentación no debe depender de la lógica de negocio, sino de abstracciones.
    - Documenta y comenta el código de forma clara, y sobre todo aquellas aportaciones que no están indicadas en la descripción de la actividad.
-   - Separa los métodos estáticos (en Kotlin se implementan mediante *companion objects*) y asegúrate de que la creación de instancias se haga mediante el método `creaInstancia`.
+   - No te olvides de los métodos de clase o estáticos (en Kotlin se implementan mediante *companion objects*). Asegúrate de que la creación de instancias de Evento y Tarea se realicen mediante el método de clase `creaInstancia`.
 
-4. **Interfaz de Usuario (Consola)**
+4. **Logica de presentación: Interfaz de Usuario (Consola)**
+   - La capa de presentación debe comunicarse con la lógica de negocio a través de interfaces o abstracciones, a partir de las cuales debe invocar a los métodos del servicio para realizar las operaciones solicitadas por el usuario.
+   - Por tanto, la capa de presentación no debe contener lógica de negocio, sino únicamente la interacción con el usuario.
    - La aplicación debe interactuar con el usuario a través de la consola, mostrando un menú que permita:
-     - Crear una nueva actividad (seleccionando entre Tarea o Evento).
-     - Listar todas las actividades registradas. Aplicando polimorfismo, se debe mostrar el detalle de cada actividad (id y descripción).
-   - La capa de presentación debe comunicarse con la lógica de negocio a través de interfaces o abstracciones.
+      - Crear una nueva actividad (seleccionando entre Tarea o Evento).
+      - Listar todas las actividades registradas. Aplicando polimorfismo, se debe mostrar el detalle de cada actividad.
+   - Crea una interfaz de usuario sencilla que muestre un menú con las opciones descritas en el punto anterior.
 
 5. **Lógica de Aplicación**
    - Implementa un servicio (por ejemplo, `ActividadService`) que gestione la creación, almacenamiento (en memoria) y consulta de actividades.
    - Este servicio debe depender de una interfaz de repositorio (por ejemplo, `IActividadRepository`), permitiendo cambiar la implementación del almacenamiento sin afectar la lógica de negocio.
 
+6. **Lógica de acceso a datos**
+   - Implementa la interfaz `IActividadRepository`, un repositorio en memoria que permita almacenar y recuperar las actividades.
+   - Asegúrate de que la lógica de negocio no dependa de esta implementación concreta, sino de una abstracción (interfaz de repositorio).
 
 **Objetivo:**
 
@@ -81,7 +86,7 @@ La aplicación debe seguir una **arquitectura en capas**, separando claramente:
 
 **Trabajo a realizar:**
 
-El que se deriva de la descripción. No obsgtante te listo algunas cosas, auqnue no tienen porque estar todas:
+El trabajo a realizar es el que se deriva de la descripción. No obstante te listo algunas cosas a realizar, aunque no es una lista exahustiva de lo que debes hacer:
 
 1. **Definición de Clases y Estructura del Proyecto**
    - Crea un paquete (o módulo) para cada capa: 
