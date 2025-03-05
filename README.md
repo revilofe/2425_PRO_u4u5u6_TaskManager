@@ -36,20 +36,20 @@ La aplicación debe seguir una **arquitectura en capas**, separando claramente:
      - Posee un `id`. Se asigna valor automáticamente al crear la instancia. No puede ser nula. No se puede modificar.
      - Posee una `fechaCreacion`. Se asigna valor automáticamente al crear la instancia. No puede ser nula. No se puede modificar.
      - Posee una `descripcion`. No puede ser nula.
-     - Debe incluir una propiedad, `detalle`, cuyo `get` retorne la concatenación del `id` y la `descripción`: `id + " - " + descripción`
+     - Debe incluir una propiedad, `detalle`, cuyo `get` retorne la concatenación del `id` y la `descripción`. Se verá así: `<id> + " - " + <descripción>`
    - **`Tarea`:**
      - Hereda las propiedades de `Actividad`.
      - Posee una propiedad `estado`, por defecto abierta. Toma valores de la enum class `Status` = {`ABIERTA`, `CERRADA`}
      - Su único constructor es `privado`. Se debe disponer de un método de clase (companion object) llamado `creaInstancia` para generar una nueva instancia.
-     - Sobreescribe `toString`. Muestra formateada toda la información de la tarea, en modo `Tarea=[nombreAtributo: valorAtributo, ...]`.
+     - Sobreescribe `toString`. Muestra formateada toda la información de la tarea, en modo `Tarea=[nombreAtributo: <valorAtributo>, ...]`.
      - Cualquier otra propiedad o método que consideres necesario. No olvides comentarlo
    - **`Evento`:**
      - Hereda las propiedades de Actividad.
      - Posee una `fecha` de realización. No puede ser nula.
      - Posee una `ubicación`, representada mediante una cadena.
-     - Posee un `detalle` que se genera dinámicamente: `id+ " - " + ubicacion + " - " + descripción`.
+     - Posee un `detalle` que se genera dinámicamente: `<id>+ " - " + <ubicacion> + " - " + <descripcion>`.
      - Similar a `Tarea` en cuanto a que su único constructor es privado y dispone del método de clase `creaInstancia` para crear las instancias.
-     - Sobre escribe `toString`. Muestra formateada toda la información del evento.
+     - Sobreescribe `toString`. Muestra formateada toda la información de la tarea, en modo `Evento=[nombreAtributo: <valorAtributo>, ...]`.
      - Cualquier otra propiedad o método que consideres necesario. No olvides comentarlo
 
 
@@ -64,7 +64,8 @@ La aplicación debe seguir una **arquitectura en capas**, separando claramente:
    - La aplicación debe interactuar con el usuario a través de la consola, mostrando un menú que permita:
       - Crear una nueva actividad (seleccionando entre Tarea o Evento).
       - Listar todas las actividades registradas. Aplicando polimorfismo, se debe mostrar el detalle de cada actividad.
-   - Crea una interfaz de usuario sencilla que muestre un menú con las opciones descritas en el punto anterior.
+      - Listar todas las tareas registradas, podiendo seleccionar entre estados `ABIERTA` o `CERRADA` o ambos.
+   - La interface de usuario tiene que ser sencilla, mostrándo un menú con las opciones descritas en el punto anterior.
 
 5. **Lógica de Aplicación**
    - Implementa un servicio (por ejemplo, `ActividadService`) que gestione la creación, almacenamiento (en memoria) y consulta de actividades.
